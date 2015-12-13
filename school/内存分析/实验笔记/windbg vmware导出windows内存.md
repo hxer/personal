@@ -33,7 +33,7 @@
 
     备注：
 
-    1. xp C:\boot.ini 文件最后添加一行，如下
+    1.xp C:\boot.ini 文件最后添加一行，如下
 
     > multi(0)disk(0)rdisk(0)partition(1)\WINDOWS="MicrosoftWindows XP Professional Debug" /fastdetect /debug /debugport=com1 /baudrate=115200
 
@@ -57,9 +57,9 @@
 
     * 操作
 
-        1. windbg成功连接上VMWare里面的windows系统
-        2. 在windbg命令行里面输入 .load pykd.pyd  (.load E:\path to\x86\pykd.pyd)
-        3. 接着输入 !py get_x86memory.py ,即可以运行程序
+        1.windbg成功连接上VMWare里面的windows系统
+        2.在windbg命令行里面输入 .load pykd.pyd  (.load E:\path to\x86\pykd.pyd)
+        3.接着输入 !py get_x86memory.py ,即可以运行程序
 
 * 5.编写程序
 
@@ -68,11 +68,11 @@
     * 获取x86内存文件: get_x86memory.py
 
     备注
-    * 1. get_x86memory.py
+    * 1.get_x86memory.py
 
         > 程序中，需要手动设置要保存文件的路径
 
-    * 2. 导入pykd.pyd文件失败
+    * 2.导入pykd.pyd文件失败
 
         > 下载的插件版本和本地安装的python版本不一致
         > windbg死掉？(还不清楚原因)
