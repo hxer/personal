@@ -15,31 +15,33 @@
 
 ### 环境配置和安装过程
 
-* 1. VMWare上面安装windows 虚拟机
+* 1.VMWare上面安装windows 虚拟机
 
-* 2. 安装windbg
+* 2.安装windbg
 
     * 配置符号搜索路径：
 
         通过 File→Symbol File Path，输入
 
-        SRV*E:\windbg_path\windbgsymbols*http://msdl.microsoft.com/download/symbols
+        SRV\*E:\windbg_path\windbgsymbols\*http://msdl.microsoft.com/download/symbols
 
-* 3. 配置windbg和windows虚拟机之间的com串口，搭建调试环境
+* 3.配置windbg和windows虚拟机之间的com串口，搭建调试环境
 
     * 配置调试window XP的环境
 
-    [Xp+WinDBG+VMware调试内核][5]
+        [Xp+WinDBG+VMware调试内核][5]
 
     备注：
+
     1. xp C:\boot.ini 文件最后添加一行，如下
 
     > multi(0)disk(0)rdisk(0)partition(1)\WINDOWS="MicrosoftWindows XP Professional Debug" /fastdetect /debug /debugport=com1 /baudrate=115200
-    > 其中'debugport=com1',根据VmWare添加串口的时候，名称为串行端口 2,则改为'debugport=com2',否则会导致连接不上
+
+    其中'debugport=com1',根据VmWare添加串口的时候，名称为串行端口 2,则改为'debugport=com2',否则会导致连接不上
 
     * 配置调试window 7,8的环境
 
-    [使用 vmware+windbg 分析调试 windows 7 内核][2]
+        [使用 vmware+windbg 分析调试 windows 7 内核][2]
 
 * 4.配置pykd
 
@@ -56,10 +58,10 @@
     * 操作
 
         1. windbg成功连接上VMWare里面的windows系统
-        2. 在windbg命令行里面输入 .load pykd.pyd
+        2. 在windbg命令行里面输入 .load pykd.pyd  (.load E:\path to\x86\pykd.pyd)
         3. 接着输入 !py get_x86memory.py ,即可以运行程序
 
-* 5. 编写程序
+* 5.编写程序
 
     利用windbg调试工具导出windows虚拟机的内存信息。由于内存页面大小在win32系统中一般是4K，对于共4G大小的内存文件，我们在程序中从低地址将内存页面一页一页写进文本文件，这里是对于不同的系统，文件名分别是xp_whole_memory，win7_whole_memory和win8_whole_memory二进制文件。又因为内存中有很多地方没有信息，即所谓的缺页，为了方便以后的研究，我们有必要将这些没有的信息的页面的地址记录下来，存在mark_missing_address.txt文件里面。值得一提的是在导出内存是，我们将没有信息的页面全部用0填充。
 
@@ -75,7 +77,7 @@
         > 下载的插件版本和本地安装的python版本不一致
         > windbg死掉？(还不清楚原因)
 
-* 6. 然后，就需要十个小时的等待，就能得到内存文件了。
+* 6.需要十个小时的等待，就能得到内存文件了。
 
 
 [1]: http://msdl.microsoft.com/download/symbols/debuggers/dbg_x86_6.6.07.5.exe
