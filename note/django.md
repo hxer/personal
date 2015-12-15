@@ -4,7 +4,9 @@
 
 ## 参考
 
-<a href="http://zozoz.github.io/myblog/2015/08/28/django%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%BD%91%E7%AB%99/" >Django快速建网站</a>
+* [Django快速建网站][1]
+
+[1]: http://zozoz.github.io/myblog/2015/08/28/django%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%BD%91%E7%AB%99/
 
 ### 基本命令
 
@@ -96,7 +98,7 @@
     <head></head>
     <body>
         {% block hello %}
-            HELLO 
+            HELLO
         {% endblock %}
     </body>
 </html>
@@ -129,3 +131,49 @@ World
 Hello World
     </body>
 </html>
+
+### note
+
+* login redirect
+
+    django登录后默认的跳转页面是 "/account/profile/",可以在 settings.py 文件中设置，改变重定向，如
+
+    > LOGIN_REDIRECT_URL = '/'
+
+* 自定义的 app 名称避免与内建名称相同
+
+* models field
+
+-  OneToOneField vs ForeignKey
+
+OneToOneField, A one-to-one relationship. Conceptually, this is similar to a ForeignKey with unique=True, but the "reverse" side of the relation will directly return a single object.
+
+In contrast to the OneToOneField "reverse" relation, a ForeignKey "reverse" relation returns a QuerySet
+
+参考: [What's the difference between django OneToOneField and ForeignKey][10]
+
+
+[10]: http://stackoverflow.com/questions/5870537/whats-the-difference-between-django-onetoonefield-and-foreignkey
+
+* windows 运行 django
+
+- "python manage.py runserver", cmd 需要管理员权限执行
+- 小心端口占用，酷狗音乐使用了 8000 端口
+
+* settings
+
+- "from django.conf import settings" is better than "from yourprojectname import settings", for better portability
+
+- STATIC_ROOT = 'staticfiles'
+
+> relative path, when run "python manage.py collectstatic", collect static files to this directory
+
+- django查找静态文件的范围
+
+    + yourapp/static/yourapp/staticfiles
+
+    + STATICFILES_DIRS
+
+    + STATIC_ROOT
+
+- MEDIA_ROOT --must absolute path
