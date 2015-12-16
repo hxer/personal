@@ -55,6 +55,8 @@
         2. 下载exe程序(python2.7 x86版),接着执行它
         3. 开启cmd，切换到 C:\Program Files\Common Files\Microsoft Shared\VC下， 执行注册命令 regsvr32 msdia90.dll 系统会弹窗显示成功
 
+    * pip install pykd
+
     * 操作
 
         1.windbg成功连接上VMWare里面的windows系统
@@ -75,7 +77,8 @@
     * 2.导入pykd.pyd文件失败
 
         > 下载的插件版本和本地安装的python版本不一致
-        > windbg死掉？(还不清楚原因)
+
+        > windbg死掉：经调试是python27.dll问题，它是使用64位的python27.dll，在.load pykd.pyd连接32位虚拟机时，发生读取位置冲突错误
 
 * 6.需要十个小时的等待，就能得到内存文件了。
 

@@ -8,11 +8,12 @@ pagesize = 0x1000
 looptime = 0x100000000 / 0x1000
 
 def processInfo():
-    temp_filepath = "D:\Temp_memory"
-    whole_filepath = "D:\Xp_whole_memory"
-    zero_filepath = "D:\zero_memory"
-    mark_missing_filePath = "D:\mark_missing_address.txt"
-    mark_exist_filePath = "D:\mark_exist_address.txt"
+    base_dir = 'E:\\'
+    temp_filepath = os.path.join(base_dir, "Temp_memory")
+    whole_filepath = os.path.join(base_dir, "Xp_whole_memory")
+    zero_filepath = os.path.join(base_dir, "zero_memory")
+    mark_missing_filePath = os.path.join(base_dir, "mark_missing_address.txt")
+    mark_exist_filePath = os.path.join(base_dir, "mark_exist_address.txt")
 
     whole_file = open(whole_filepath,'wb+')
     zero_file = open(zero_filepath, 'rb')
