@@ -177,3 +177,30 @@ In contrast to the OneToOneField "reverse" relation, a ForeignKey "reverse" rela
     + STATIC_ROOT
 
 - MEDIA_ROOT --must absolute path
+
+* request
+
+    + request.path    除域名以外的请求路径，以正斜杠开头   "/hello/"
+    + request.get_host()  主机名（比如，通常所说的域名） "127.0.0.1:8000" or "www.example.com"
+    + request.get_full_path() 请求路径，可能包含查询字符串  "/hello/?print=true"
+    + request.is_secure() HTTPS访问，返回True，否则返回False   True 或者 False
+
+    + request.META 是一个Python字典，包含了所有本次HTTP请求的Header信息
+        
+        * HTTP_REFERER，进站前链接网页
+        * HTTP_USER_AGENT，用户浏览器的user-agent字符串
+        * REMOTE_ADDR 客户端IP，(如果申请是经过代理服务器的话，那么它可能是以逗号分割的多个IP地址，如："12.345.67.89,23.456.78.90" 。)
+        
+    > request.META 是一个普通的Python字典，访问一个不存在的键时，会触发一个KeyError异常
+    
+    +  request.GET 和 request.POST --类字典对象
+
+* form
+
+is_valid()方法：验证它的数据是否合法。
+
+errors属性：提供了一个字段与错误消息相映射的字典表
+
+cleaned_data属性：在数据合法的情况下，它包含干净的提交数据的字典
+
+Django的form系统自动寻找匹配的函数方法，该方法名称以clean_开头，并以字段名称结束。 如果有这样的方法，它将在校验时被调用;自定义的clean_func()方法将在指定字段的默认校验逻辑执行之后被调用
