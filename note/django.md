@@ -1,4 +1,4 @@
-# django
+# django1.8.7
 
 ---
 
@@ -24,18 +24,83 @@
 
 > 需要先配置 STATIC_ROOT
 
-* 国际化
+### 国际化和本地化
 
-根目录下面创建一个locale文件夹，然后使用命令创建国际化文件：
+#### 本地化配置
 
-    + django-admin.py makemessages -l zh_CN
+* 根目录下面创建一个locale文件夹，
+* 配置setting.py
 
-    执行完后，locale文件夹下面创建zh_CN/LC_MESSAGES/django.po
-    写好了所有的翻译后执行：
+```python
+from django.utils.translation import ugettext_lazy as _
 
-    + django-admin.py compilemessages
+LANGUAGES = [
+    ('zh-hans', _('Simplified Chinese')),  # zh-cn is deprecated
+    ('en', _('English')),
+]
 
-    生成文件zh_CN/LC_MESSAGES/django.mo，最终的目标文件
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale/'),)  #[must be tuple]
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+)
+
+TEMPLATES = [
+    {
+        ...
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'django.template.context_processors.i18n',
+            ],
+        },
+    },
+]
+```
+
+> if no translation is found. leave the default: LANGUAGE_CODE = 'en-us'
+
+> LocaleMiddleware 指定语言偏好。中间件的顺序是有影响的，最好按照依照以下要求：
+> 保证它是第一批安装的中间件类。
+> 因为 LocalMiddleware 要用到session数据，所以需要放在 SessionMiddleware 之后。
+> 如果你使用CacheMiddleware,把LocaleMiddleware放在它后面。
+> 
+> LocaleMiddleware 按照如下算法确定用户的语言:
+> 首先，在当前用户的 session 的中查找django_language键；
+> 如未找到，它会找寻一个cookie
+> 还找不到的话，它会在 HTTP 请求头部里查找Accept‐Language， 
+> 该头部是你的浏览器发送的，并且按优先顺序告诉服务器你的语言偏好。 
+> Django会尝试头部中的每一个语种直到它发现一个可用的翻译。
+> 以上都失败了的话, 就使用全局的 LANGUAGE_CODE 设定值。
+> 中文 -> LANGUAGE_CODE = 'zh-hans'
+ 
+> Django寻找项目中的翻译
+> 首先，Django在该视图所在的应用程序文件夹中寻找 locale 目录。 
+> 若找到所选语言的翻译，则加载该翻译。
+> 第二步，Django在项目目录中寻找 locale 目录。 若找到翻译，则加载该翻译。
+> 最后，Django使用 django/conf/locale 目录中的基本翻译。
+
+#### 命令创建文件
+
+* 然后使用命令创建国际化文件：
+```python
+ django-admin.py makemessages -l zh_Hans
+```
+
+> zh_Hans 必须与setting.py 中 LANGUAGES 配置相同, 而且不能是 **zh-hans**, '-' 与'_' 有区别; 必须是 **zh_Hans**, zh_hans都是错的
+
+执行完后，locale 文件夹下面创建  zh_hans/LC_MESSAGES/django.po 写好了所有的翻译后执行：
+```python
+ django-admin.py compilemessages
+```
+生成文件 zh_hans/LC_MESSAGES/django.mo ，最终的目标文件
+
+* 如果我们在代码或模板中增加或删除了相关的国际化代码,需要从新运行 **makemessages**  和  **compilemessages**
+
+* 如果只是改了django.po中的翻译,只需 **compilemessages** 就行了
+
 
 ### 模板
 
@@ -46,7 +111,7 @@
 
 * entends[S]
 
-> 告诉模板引擎，这个模板继承了另一个模板
+> 告诉模板引擎，这个模板继承了另一个模板, 必须放在子模版的第一行
 
 * load[S]
 
@@ -177,6 +242,9 @@ In contrast to the OneToOneField "reverse" relation, a ForeignKey "reverse" rela
     + STATIC_ROOT
 
 - MEDIA_ROOT --must absolute path
+
+- use "MEDIA_URL" in template
+    must add "django.core.context_processors.media" in settings.py->TEMPLATES->OPTIONS->context_processors
 
 * request
 
